@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Movie CRUD</title>
+    <script>
+      async function fetchMovies() {
+        const response = await fetch("/movies");
+        const movies = await response.json();
+        document.getElementById("movies").innerHTML = JSON.stringify(
+          movies,
+          null,
+          2
+        );
+      }
+
+      async function fetchMovie() {
+        const id = document.getElementById("movieId").value;
+        const response = await fetch(`/movies/${id}`);
+        const movie = await response.json();
+        document.getElementById("movie").innerHTML = JSON.stringify(
+          movie,
+          null,
+          2
+        );
+      }
+
+      async function createMovie() {
+        const movie = {
+          isbn: document.getElementById("isbn").value,
+          title: document.getElementById("title").value,
+          director: {
+            firstname: document.getElementById("directorFirstName").value,
+            lastname: document.getElementById("directorLastName").value,
+          },
+        };
+        const response = await fetch("/movies", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(movie),
+        });
+        const newMovie = await response.json();
+        document.getElementById("newMovie").innerHTML = JSON.stringify(
+          newMovie,
+          null,
+          2
+        );
+      }
+
+      async function updateMovie() {
+        const id = document.getElementById("updateMovieId").value;
+        const movie = {
+          isbn: document.getElementById("updateIsbn").value,
+          title: document.getElementById("updateTitle").value,
+          director: {
+            firstname: document.getElementById("updateDirectorFirstName").value,
+            lastname: document.getElementById("updateDirectorLastName").value,
+          },
+        };
+        const response = await fetch(`/movies/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(movie),
+        });
+        const updatedMovie = await response.json();
+        document.getElementById("updatedMovie").innerHTML = JSON.stringify(
+          updatedMovie,
+          null,
+          2
+        );
+      }
+
+      async function deleteMovie() {
+        const id = document.getElementById("deleteMovieId").value;
+        await fetch(`/movies/${id}`, {
+          method: "DELETE",
+        });
+        document.getElementById(
+          "deletedMovie"
+        ).innerHTML = `Movie with ID ${id} deleted.`;
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Movie CRUD Operations</h2>
+    <button onclick="fetchMovies()">Get All Movies</button>
+    <pre id="movies"></pre>
+
+    <h3>Get Movie by ID</h3>
+    <input type="text" id="movieId" placeholder="Movie ID" />
+    <button onclick="fetchMovie()">Get Movie</button>
+    <pre id="movie"></pre>
+
+    <h3>Create Movie</h3>
+    <input type="text" id="isbn" placeholder="ISBN" />
+    <input type="text" id="title" placeholder="Title" />
+    <input
+      type="text"
+      id="directorFirstName"
+      placeholder="Director First Name"
+    />
+    <input type="text" id="directorLastName" placeholder="Director Last Name" />
+    <button onclick="createMovie()">Create Movie</button>
+    <pre id="newMovie"></pre>
+
+    <h3>Update Movie</h3>
+    <input type="text" id="updateMovieId" placeholder="Movie ID" />
+    <input type="text" id="updateIsbn" placeholder="ISBN" />
+    <input type="text" id="updateTitle" placeholder="Title" />
+    <input
+      type="text"
+      id="updateDirectorFirstName"
+      placeholder="Director First Name"
+    />
+    <input
+      type="text"
+      id="updateDirectorLastName"
+      placeholder="Director Last Name"
+    />
+    <button onclick="updateMovie()">Update Movie</button>
+    <pre id="updatedMovie"></pre>
+
+    <h3>Delete Movie</h3>
+    <input type="text" id="deleteMovieId" placeholder="Movie ID" />
+    <button onclick="deleteMovie()">Delete Movie</button>
+    <pre id="deletedMovie"></pre>
+  </body>
+</html>

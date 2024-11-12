@@ -29,6 +29,18 @@ func getMovies(c *gin.Context) {
 	c.JSON(http.StatusOK, movies)
 }
 
+func getMovie(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+	id := c.Param("id")
+	for _, item := range movies {
+		if item.Id == id {
+			c.JSON(http.StatusOK, item)
+			return
+		}
+	}
+	c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+}
+
 func createMovie(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 	var movie Movie
@@ -76,6 +88,14 @@ func deleteMovie(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
+
+	// Serve static files
+	router.Static("/static", "./static")
+
+	// Serve the index.html file at the root URL
+	router.GET("/", func(c *gin.Context) {
+		c.File("./static/index.html")
+	})
 
 	movies = append(movies, Movie{
 		Id:       "1",
