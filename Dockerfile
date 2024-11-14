@@ -15,10 +15,10 @@ RUN go mod download
 COPY . .
 
 # Build the Go application
-RUN go build -o simple-http-server main.go
+RUN go build -o go-gin-movies-crud main.go
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["./simple-http-server"]
+CMD ["./go-gin-movies-crud"]
